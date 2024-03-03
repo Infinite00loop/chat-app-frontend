@@ -12,7 +12,11 @@ async function onlogin(e){
             const res= await axios.post(`${api_endpoint}admin/login-user`,myObj)
                 alert(res.data.message)
                 localStorage.setItem('token', res.data.token)
-                localStorage.setItem('username', email_)
+                const token=localStorage.getItem('token');
+                await axios.post(`${api_endpoint}chat/insert-message`,{
+                    chat: 'joined',
+                    typeofrequest: '1'
+                },{headers:{"authorization": token}})
                 window.location.href="../chat/chat.html"
         }
         else{
