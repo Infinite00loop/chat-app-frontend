@@ -12,6 +12,8 @@ async function onlogin(e){
             const res= await axios.post(`${api_endpoint}admin/login-user`,myObj)
                 alert(res.data.message)
                 localStorage.setItem('token', res.data.token)
+                localStorage.setItem('username', email_)
+                window.location.href="../chat/chat.html"
         }
         else{
             alert('Please fill the empty fields!') 
