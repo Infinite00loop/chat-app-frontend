@@ -9,7 +9,9 @@ window.addEventListener('DOMContentLoaded',()=>{
 
 async function getChats(){
     tabledata.innerHTML='';
-    const response=await axios.get(`${api_endpoint}chat/get-messages`,{headers:{"authorization": token}});
+    var lastmessageid;
+    const response=await axios.get(`${api_endpoint}chat/get-messages`,{params: {lastmessageid : lastmessageid}, headers:{"authorization": token}});
+    localStorage.setItem('messages',JSON.stringify(response.data.messages))
     console.log(response)
     for(var i=0;i<response.data.messages.length;i++){
         showChats(response.data.messages[i]);
