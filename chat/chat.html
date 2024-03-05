@@ -6,6 +6,22 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">    
     <title>Document</title>
     <style>
+    .form-container {
+        border-radius: 15px;
+        padding: 20px;
+        box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+        background: rgba(255, 255, 255, 0.9);
+        width: 300px; 
+        position: absolute;
+        top: 20%;
+        right: 50px; 
+        transform: translate(0, -50%);
+    }
+
+    .btn .form-group{
+        font-size: 14px;
+        padding: 8px 16px;
+    }
         footer {
             background-color: #333;
             color: white;
@@ -16,12 +32,11 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-top: 20px;
         }
 
         input[type="text"] {
             padding: 5px;
-            width: 1000px;
+            width: 100%;
             border-radius: 5px;
         }
 
@@ -50,25 +65,37 @@
         td {
             font-size: 20px
         }
-        table{
-            margin-bottom: 20px;
+        .container-flex {
+            padding-bottom: 60px;
         }
     </style>
 </head>
 <body>
     <h1>Chat App</h1>
-    <table class="table">
-        <tbody id="tabledata">
-        </tbody>
-    </table>
-    <footer>
-        <form class="form-inline">
-            <div class="form-group mr-2">
-                <input id="idk2" type="text" placeholder="Type here......">
+    <div class="form-container">
+        <form id="form" action="#" class="p-3">
+            <h2 class="text-center mb-4">Create New Group</h2>
+            <div class="form-group">
+                <input type="text" id="idk4" class="form-control" placeholder="Group Name" required>
             </div>
-            <button id="idk3" class="btn btn-primary" onclick="send(event)">Send</button>
+            <button class="btn btn-primary btn-block font-weight-bold buttonStyle" onclick="creategroup(event)">Create</button>
         </form>
-    </footer>
+    </div>    
+    <div class="container-flex">
+        <table id='chatTable' class="table">
+            <tbody id="tabledata">
+            </tbody>
+        </table>
+        <footer>
+            <form class="form-inline">
+                <div class="form-group mr-2">
+                    <input id="idk2" type="text" placeholder="Type here......">
+                </div>
+                <button id="idk3" class="btn btn-primary" onclick="send(event)">Send</button>
+            </form>
+        </footer>
+    </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
     <script src="../config.js"></script>
     <script src="chat.js"></script>    

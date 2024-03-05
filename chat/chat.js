@@ -1,20 +1,24 @@
 const tabledata=document.getElementById('tabledata');
 const token=localStorage.getItem('token');
-setInterval(()=>{
-    getChats()
-},5000);
+// setInterval(()=>{
+//     getChats()
+// },5000);
 window.addEventListener('DOMContentLoaded',()=>{
     getChats();
 })
 
 async function getChats(){
     tabledata.innerHTML='';
+    const localmessages=JSON.parse(localStorage.getItem('messages'));
     var lastmessageid;
+    if(localmessages.length>0){
+        lastmessageid=localmessages[localmessages.length-1].id;
+    }
     const response=await axios.get(`${api_endpoint}chat/get-messages`,{params: {lastmessageid : lastmessageid}, headers:{"authorization": token}});
-    localStorage.setItem('messages',JSON.stringify(response.data.messages))
-    console.log(response)
-    for(var i=0;i<response.data.messages.length;i++){
-        showChats(response.data.messages[i]);
+    const messages=[...localmessages,...response.data.messages]
+    localStorage.setItem('messages',JSON.stringify(messages))
+    for(var i=0;i<messages.length;i++){
+        showChats(messages[i]);
     }
 }
 
@@ -35,6 +39,7 @@ function showChats(myObj){
 
 async function send(e){
  try{
+    e.preventDefault();
     const chat_=document.getElementById('idk2').value;
     await axios.post(`${api_endpoint}chat/insert-message`,{
         chat: chat_,
@@ -45,4 +50,17 @@ async function send(e){
  catch(err){
     console.log('Something went wrong ', err);
  }
+}
+async function creategroup(e){
+    try{
+        e.preventDefault();
+       const grpname_=document.getElementById('idk4').value;
+       await axios.post(`${api_endpoint}group/create-group`,{
+           grpname: grpname_
+       },{headers:{"authorization": token}})
+       alert('group created successfully');
+    }
+    catch(err){
+       console.log('Something went wrong ', err);
+    }
 }
