@@ -1,3 +1,14 @@
+const urlParams = new URLSearchParams(window.location.search);
+const groupid = urlParams.get('groupid');
+const groupname = urlParams.get('groupname');
+var loginlink = document.getElementById('loginlink');
+
+if(groupname){
+    loginlink.href=`../login/login.html?groupid=${groupid}&groupname=${groupname}`
+}
+else{
+    loginlink.href=`../login/login.html`
+}
 async function onsignup(e){
     e.preventDefault();
     var name_=document.getElementById('id1').value;
@@ -17,8 +28,12 @@ async function onsignup(e){
                 if(result.data==""){
                    await axios.post(`${api_endpoint}admin/insert-user`,myObj)
                    alert('signed up successfully')
-                   window.location.href="../login/login.html"
+                   if (groupname) {
+                    window.location.href=`../login/login.html?groupid=${groupid}&groupname=${groupname}`
                 }
+                else{
+                    window.location.href=`../login/login.html`
+                }                }
                 else{
                     alert('User already exists')
                 }

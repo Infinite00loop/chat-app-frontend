@@ -1,9 +1,17 @@
 const tabledata=document.getElementById('tabledata');
 const token=localStorage.getItem('token');
+const urlParams = new URLSearchParams(window.location.search);
+const groupid = urlParams.get('groupid');
+const groupname = urlParams.get('groupname');
 // setInterval(()=>{
 //     getChats()
 // },5000);
 window.addEventListener('DOMContentLoaded',()=>{
+    if (groupname) {
+        const groupNameSpan = document.getElementById('groupNameSpan');
+        groupNameSpan.textContent = groupname;
+        $('#groupInvitationModal').modal('show');
+    }
     getGroups();
 })
 async function getGroups(){
@@ -55,3 +63,23 @@ async function creategroup(e){
        console.log('Something went wrong ', err);
     }
 }
+function canceljoin(e){
+    e.preventDefault();
+    window.location.href=`..${window.location.pathname}`
+   }
+
+   async function beAmember(e){
+    try{
+        e.preventDefault();
+        const response=await axios.post(`${api_endpoint}invite/be-a-member`,{
+            groupId: groupid
+        },{headers:{"authorization": token}});
+        getGroups();
+        alert(response.data.message)
+        window.location.href=`..${window.location.pathname}`
+
+    }
+    catch(err){
+        console.log('Something went wrong ', err);
+     }    
+   }
