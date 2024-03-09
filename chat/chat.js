@@ -1,5 +1,8 @@
 const tabledata=document.getElementById('tabledata');
 const token=localStorage.getItem('token');
+const grouptoken=localStorage.getItem('grouptoken')
+const groupname=localStorage.getItem('groupname')
+document.getElementById('grpname').textContent=groupname;
 // setInterval(()=>{
 //     getChats()
 // },5000);
@@ -9,14 +12,20 @@ window.addEventListener('DOMContentLoaded',()=>{
 
 async function getChats(){
     tabledata.innerHTML='';
-    const localmessages=JSON.parse(localStorage.getItem('messages'));
+    const localmessages=JSON.parse(localStorage.getItem(groupname));
     var lastmessageid;
-    if(localmessages.length>0){
+    if(localmessages && localmessages.length>0){
         lastmessageid=localmessages[localmessages.length-1].id;
     }
-    const response=await axios.get(`${api_endpoint}chat/get-messages`,{params: {lastmessageid : lastmessageid}, headers:{"authorization": token}});
-    const messages=[...localmessages,...response.data.messages]
-    localStorage.setItem('messages',JSON.stringify(messages))
+    const response=await axios.get(`${api_endpoint}chat/get-messages`,{params: {lastmessageid : lastmessageid}, headers:{"authorization": token,"groupauthorize":grouptoken}});
+    let messages=[];
+    if(localmessages){
+        messages=[...localmessages,...response.data.messages]
+    }
+    else{
+        messages=response.data.messages;
+    }
+    localStorage.setItem('groupname',JSON.stringify(messages))
     for(var i=0;i<messages.length;i++){
         showChats(messages[i]);
     }
@@ -44,23 +53,10 @@ async function send(e){
     await axios.post(`${api_endpoint}chat/insert-message`,{
         chat: chat_,
         typeofrequest: '2'
-    },{headers:{"authorization": token}})
+    },{headers:{"authorization": token, "groupauthorize":grouptoken}})
     getChats();
  }
  catch(err){
     console.log('Something went wrong ', err);
  }
-}
-async function creategroup(e){
-    try{
-        e.preventDefault();
-       const grpname_=document.getElementById('idk4').value;
-       await axios.post(`${api_endpoint}group/create-group`,{
-           grpname: grpname_
-       },{headers:{"authorization": token}})
-       alert('group created successfully');
-    }
-    catch(err){
-       console.log('Something went wrong ', err);
-    }
 }
